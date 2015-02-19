@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Gamer</title>
+</head>
+<body>
+    <h1>Add a Gamer</h1>
+
+    <form id="gamer_form" method="post" action="/guess_mod/add_gamer/">
+        {% csrf_token %}
+        {% for field in forms.visible_fields %}
+            {{ field.errors }}
+            {{ field.help_text }}
+            {{ field }}
+        {% endfor %}
+
+        <imput type="submit" name="submit" value="Create Gamer" />
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Guess Mod</title>
+</head>
+<body>
+    <h1>Register with Guess Something Fun</h1>
+
+    {% if registered %}
+
+    Guess mod says: <strong>thank you for registering!</strong>
+    <a href="/guess_mod/">Return to the homepage</a><br />
+    {% else %}
+
+    Guess mod says: <strong>Register here!</strong>
+
+    <form id="user_form" method="post" action="/guess_mod/register/" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ user_form.as_p }}
+        {{ gamer_prof_form.as_p }}
+
+        <input type="submit" name="submit" value="Register" />
+    </form>
+    {% endif %}
+
+</body>
+</html>

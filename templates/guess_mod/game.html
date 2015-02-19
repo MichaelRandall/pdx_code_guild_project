@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html>
+<head lang="en">
+
+    <meta charset="UTF-8">
+    <title>Guess Again</title>
+    <link rel="stylesheet" href="{% static 'css/grid_builder.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flip.css' %}">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{% static 'js/gameOverTest.js' %}"></script>
+    <script src="{% static 'js/game_clock.js' %}"></script>
+    <script src="{% static 'js/reset_panels.js' %}"></script>
+    <script src="{% static 'js/buildGameBoard.js' %}"></script>
+    <!--<script type="text/javascript" src="grid_build.js"></script>-->
+    <script src="{% static 'js/grid_builder.js' %}"></script>
+
+    <script>
+        window.addEventListener('load', function () {
+            init();
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <h1>
+        {% if user.is_authenticated %}
+        <h1>Guess_mod says hello {{ user.username }}!</h1>
+        {% else %}
+        <h1>Guess_mod says hello, whoever you are!</h1>
+        {% endif %}
+    </h1>
+
+<div id="container">
+</div>
+<div id="stats">
+    <p id="gameTime">Game Time: <span id="totTime">0</span></p>
+
+    <p id="movesCount">Moves Count: <span id="mvCount">0</span></p>
+
+    <p id="incorrectMoves">Incorrect Moves: <span id="incorrectCount">0</span></p>
+</div>
+<div id="console">
+    <div id="startBttn" class="bttn">Start Game</div>
+    <div id="pauseBttn" class="bttn">Pause Game</div>
+    <div id="resumeBttn" class="bttn">Resume Game</div>
+    <div id="resetBttn" class="bttn">Reset Game</div>
+</div>
+
+    {% if user.is_authenticated %}
+    <a href="/guess_mod/restricted/">Restricted Page</a><br />
+    <a href="/guess_mod/logout/">Logout</a><br />
+    {% else %}
+    <a href="/guess_mod/register/">Register Here</a><br />
+    <a href="/guess_mod/login/">Login</a>
+    {% endif %}
+</body>
+</html>

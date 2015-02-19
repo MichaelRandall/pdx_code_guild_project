@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Guess Module</title>
+    <script>
+        var request = new XMLHttpRequest();
+
+        function pullTheTrigger(gamerDetails){
+            request.onload = undefined;
+            request.onreadystatechange = function(){
+                if((request.readyState == 4) && (request.status == 200)){
+                    var data = JSON.parse(request.responseText);
+                    console.log(data);
+                }
+            };
+            request.open("POST","/add_game/",true);
+            request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            request.send(gamerDetails);
+        }
+
+
+
+        function burn(){
+            var gamerDetailsList = [];
+            gamerDetailsList.push(
+                    encodeURIComponent("username")
+                    + "=" + encodeURIComponent("sponge_b")
+            );
+            gamerDetailsList.push(
+                    encodeURIComponent("email")
+                    + "=" + encodeURIComponent("sponge_b@email.com")
+            );
+            console.log(gamerDetailsList);
+            pullTheTrigger(gamerDetailsList.join("&"));
+        }
+
+
+        window.addEventListener('load',function(){
+            burn();
+        });
+    </script>
+</head>
+<body>
+    <h1>
+        {% if user.is_authenticated %}
+        <h1>Guess_mod says hello {{ user.username }}!</h1>
+        {% else %}
+        <h1>Guess_mod says hello, whoever you are!</h1>
+        {% endif %}
+    </h1>
+
+    <p>This is the landing page for my app.</p>
+
+    <!--
+    <p>{{ boldmessage }}</p>
+    -->
+    {% if user.is_authenticated %}
+    <a href="/guess_mod/restricted/">Restricted Page</a><br />
+    <a href="/guess_mod/logout/">Logout</a><br />
+    {% else %}
+    <a href="/guess_mod/register/">Register Here</a><br />
+    <a href="/guess_mod/login/">Login</a>
+    {% endif %}
+
+    <p><a href="/guess_mod/about/">About</a></p>
+
+</body>
+</html>
