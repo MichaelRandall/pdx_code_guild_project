@@ -13,7 +13,7 @@ class Gamer(models.Model):
 
 class Game(models.Model):
     game_date = models.DateField(auto_now_add=True)
-    game_start = models.TimeField(null=True)
+    game_start = models.TimeField(auto_now_add=True)
     game_end = models.TimeField(null=True)
     game_duration = models.TimeField(null=True)
     total_moves = models.IntegerField(default=0)
@@ -23,7 +23,7 @@ class Game(models.Model):
     player = models.ForeignKey(User)
 
     def __unicode__(self):
-        return self.total_moves
+        return self
 
 
 class Moves(models.Model):
