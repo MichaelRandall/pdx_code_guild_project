@@ -108,6 +108,8 @@ function buildPanels(gridSize) {
                     if(isGameOver()){
                         console.log("You win");
                         clearInterval(ntime);
+
+                        //sendGameStat(gameState,user.id);
                     }else{
                         console.log("correct guess");
                     }
