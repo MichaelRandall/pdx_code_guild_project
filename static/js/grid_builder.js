@@ -39,11 +39,28 @@ var gameState = {
 	}
 }
 
+function newGameStart(){
+    var request = new XMLHttpRequest();
+
+    request.onload = undefined;
+    request.onreadystatechange = function(){
+        if((request.readyState == 4) && (request.status == 200)){
+            var data = JSON.parse(request.responseText);
+            console.log(data);
+        }
+    };
+    request.open("POST","../add_new_game/",true);
+    request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    request.send();
+}
+
 
 function init(){
 	var strtBttn = document.getElementById("startBttn");
 	strtBttn.addEventListener('click', function(){
         if(gameState.gameStateState === NOT_STARTED){
+            //starts the process of creating a new game on the server
+            newGameStart();
             gameState.gameStateState = IN_PROGRESS;
 		    //loadGrid();
             buildGameBoard(4);
