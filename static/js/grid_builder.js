@@ -59,12 +59,17 @@ function init(){
 	var strtBttn = document.getElementById("startBttn");
 	strtBttn.addEventListener('click', function(){
         if(gameState.gameStateState === NOT_STARTED){
+
             //starts the process of creating a new game on the server
             newGameStart();
+
             gameState.gameStateState = IN_PROGRESS;
+
 		    //loadGrid();
             buildGameBoard(4);
+
             gameState.movesToWin = 8;
+
 		    //Commented out for testing. Uncomment for full game
 		    ntime = setInterval(gmClock, 1000);
         } else {
