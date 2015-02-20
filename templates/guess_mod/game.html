@@ -10,12 +10,17 @@
     <link rel="stylesheet" href="{% static 'css/grid_builder.css' %}">
     <link rel="stylesheet" href="{% static 'css/flip.css' %}">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{% static 'js/send_game_stats.js' %}"></script>
     <script src="{% static 'js/gameOverTest.js' %}"></script>
     <script src="{% static 'js/game_clock.js' %}"></script>
     <script src="{% static 'js/reset_panels.js' %}"></script>
     <script src="{% static 'js/buildGameBoard.js' %}"></script>
     <!--<script type="text/javascript" src="grid_build.js"></script>-->
     <script src="{% static 'js/grid_builder.js' %}"></script>
+
+    <script>
+        var username = "{{ user.username }}";
+    </script>
 
     <script>
         window.addEventListener('load', function () {
@@ -29,7 +34,7 @@
 
     <h1>
         {% if user.is_authenticated %}
-        <h1>Guess_mod says hello {{ user.username }}!</h1>
+        <h1>Guess_mod says hello {{ user.username }} {{ user.id }}!</h1>
         {% else %}
         <h1>Guess_mod says hello, whoever you are!</h1>
         {% endif %}
