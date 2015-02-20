@@ -1,7 +1,8 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
-#from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 #from .models import GamerForm
 from guess_mod.models import Gamer, Game
@@ -12,7 +13,9 @@ def game(request):
     return render(request, 'guess_mod/game.html')
 
 def about(request):
-    return HttpResponse("This is all about me")
+    #context_dict = {'gamer': gamer_list}
+    # context_dict = {'boldmessage': "I like being bold."}
+    return render(request, 'guess_mod/about.html')
 
 @login_required
 def restricted(request):
@@ -86,3 +89,11 @@ def index(request):
     context_dict = {'gamer': gamer_list}
     # context_dict = {'boldmessage': "I like being bold."}
     return render(request, 'guess_mod/index.html', context_dict)
+
+@csrf_exempt
+def add_new_game(request):
+    if request.method == "POST":
+        current_user = request.user
+        n_game = Game(player=current_user)
+        n_game.save()
+    return HttpResponse('{"status";"success","id":n_game.id}', content_type="application/json")
