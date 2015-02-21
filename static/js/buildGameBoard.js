@@ -18,6 +18,17 @@ function generateNumbers(theCount) {
 }
 
 
+function isGameOver(){
+    if(gameState.movesToWin === gameState.correctMoveCount){
+        return true;
+        console.log("true");
+    }else{
+        return false;
+        console.log("false");
+    }
+}
+
+
 //builds the game panels, called from loadGrid function
 function buildPanels(gridSize) {
     theBoard = document.getElementById("gameBoard");
@@ -82,6 +93,7 @@ function buildPanels(gridSize) {
 
                 lastObj.mvState = "moveIncomplete";
 
+
                 gameState.moveState = 1;
             } else {
                 var lastObjNum = gameState.moves.length - 1;
@@ -108,8 +120,6 @@ function buildPanels(gridSize) {
                     if(isGameOver()){
                         console.log("You win");
                         clearInterval(ntime);
-
-                        //sendGameStat(gameState,user.id);
                     }else{
                         console.log("correct guess");
                     }
@@ -130,6 +140,7 @@ function buildPanels(gridSize) {
                     console.log("incorrect guess");
                 }
                 gameState.moveState = 0;
+                //add call to update moves object in db with update_existing_game
             }
         });
         //indGamePanel.appendChild(gamePanelElement);

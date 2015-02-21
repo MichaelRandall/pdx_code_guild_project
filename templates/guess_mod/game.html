@@ -10,16 +10,13 @@
     <link rel="stylesheet" href="{% static 'css/grid_builder.css' %}">
     <link rel="stylesheet" href="{% static 'css/flip.css' %}">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="{% static 'js/send_game_stats.js' %}"></script>
-    <script src="{% static 'js/gameOverTest.js' %}"></script>
-    <script src="{% static 'js/game_clock.js' %}"></script>
     <script src="{% static 'js/reset_panels.js' %}"></script>
     <script src="{% static 'js/buildGameBoard.js' %}"></script>
-    <!--<script type="text/javascript" src="grid_build.js"></script>-->
     <script src="{% static 'js/grid_builder.js' %}"></script>
 
     <script>
         var username = "{{ user.username }}";
+        var game = "{{ game.id }}";
     </script>
 
     <script>

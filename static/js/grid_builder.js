@@ -39,6 +39,8 @@ var gameState = {
 	}
 }
 
+
+//called when user clicks start button on game.html page
 function newGameStart(){
     var request = new XMLHttpRequest();
 
@@ -52,6 +54,30 @@ function newGameStart(){
     request.open("POST","../add_new_game/",true);
     request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     request.send();
+}
+
+
+//called from buildGameBoard.js when a user completes a move, consists of two clicks
+function update_current_game(cur_game){
+    var request = new XMLHttpRequest();
+
+    request.onload = undefined;
+    request.onreadystatechange = function(){
+        if((request.readyState == 4) && (request.status == 200)){
+            var data = JSON.parse(request.responseText);
+            console.log(data);
+        }
+    };
+    request.open("POST","../update_existing_game/",true);
+    request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    request.send();
+}
+
+function gmClock(){
+	gameState.gameTime += 1;
+    var timeKeeper = document.getElementById("totTime");
+	//console.log(gameTime);
+    timeKeeper.innerHTML = gameState.gameTime;
 }
 
 
