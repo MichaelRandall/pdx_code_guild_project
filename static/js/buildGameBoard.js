@@ -1,11 +1,11 @@
-/**
- * Created by mike on 2/6/15.
- */
-//generate numbers takes an integer representing the number of images needed for half the game board
-//loops through and adds those numbers twice to the array, numSet
 var container = document.getElementById('container');
 
+//numSet holds the group of numbers needed to generate the images for the game, it is populated
+//from the generateNumbers function
 var numSet = [];
+
+//called from the buildPanels function and updates the numSet array with the number of numbers needed
+//to generate the correct quantity of images for the game
 function generateNumbers(theCount) {
 
     var j = 0;
@@ -17,9 +17,10 @@ function generateNumbers(theCount) {
     }
 }
 
-
+//test to see if game is over, call from the buildPanels click event and called when user clicks
+//a panel in the game.
 function isGameOver(){
-    if(gameState.movesToWin === gameState.correctMoveCount){
+    if(gameDetails.movesToWin === gameDetails.correctMoveCount){
         return true;
         console.log("true");
     }else{
@@ -32,20 +33,20 @@ function isGameOver(){
 //builds the game panels, called from loadGrid function
 function buildPanels(gridSize) {
     theBoard = document.getElementById("gameBoard");
-    var newGridSize = gridSize * gridSize;
-    var panelSize = ((200 / gridSize) - 2) + "px";
-    var imagesNeeded = newGridSize / 2;
-    gameState.movesToWin = newGridSize / 2;
-    generateNumbers(imagesNeeded);
+    gameDetails.gridCount = Math.pow(gridSize, 2);
+    gameDetails.imageCount = gridSize * 2;
+    gameDetails.panelSize = ((200 / gridSize) - 2);
+    gameDetails.movesToWin = gridSize * 2;
+    generateNumbers(gameDetails.imageCount);
 
-    for (var i = 0; i < newGridSize; i++) {
+    for (var i = 0; i < gameDetails.gridCount; i++) {
 
         gamePanelElement = document.createElement("div");
         gamePanelElement.setAttribute("id", "p_" + i);
         gamePanelElement.setAttribute("state", "unflipped");
         gamePanelElement.classList.add("gamePanel");
-        gamePanelElement.style.width = panelSize;
-        gamePanelElement.style.height = panelSize;
+        gamePanelElement.style.width = gameDetails.panelSize + "px";
+        gamePanelElement.style.height = gameDetails.panelSize + "px";
 
 
         indPanel = document.createElement("div");
@@ -84,23 +85,22 @@ function buildPanels(gridSize) {
 
             var theMove = {id: panelID, icon: panelIcon, mvTime: moveTime};
             //console.log(theMove); uncomment to see each time attribute info is pushed to the moves array
-            gameState.addMove(theMove);
+            gameDetails.addMove(theMove);
 
-
-            if (gameState.moveState === 0) {
-                var lastObjNum = gameState.moves.length - 1;
-                var lastObj = gameState.moves[lastObjNum];
+            //outer if else checks is the click is the first or second part of the move
+            if (gameDetails.moveState === 0) {
+                var lastObjNum = gameDetails.moves.length - 1;
+                var lastObj = gameDetails.moves[lastObjNum];
 
                 lastObj.mvState = "moveIncomplete";
 
-
-                gameState.moveState = 1;
+                gameDetails.moveState = 1;
             } else {
-                var lastObjNum = gameState.moves.length - 1;
-                var prevObjNum = gameState.moves.length - 2;
+                var lastObjNum = gameDetails.moves.length - 1;
+                var prevObjNum = gameDetails.moves.length - 2;
 
-                var lastObj = gameState.moves[lastObjNum];
-                var prevObj = gameState.moves[prevObjNum];
+                var lastObj = gameDetails.moves[lastObjNum];
+                var prevObj = gameDetails.moves[prevObjNum];
 
                 var lastObjIcon = lastObj.icon;
                 var prevObjIcon = prevObj.icon;
@@ -110,13 +110,16 @@ function buildPanels(gridSize) {
                 if (lastObjIcon === prevObjIcon) {
 
                     lastObj.mvState = "moveMatch";
-                    gameState.moveCount += 1;
-                    console.log(gameState.moveCount);
+                    gameDetails.moveCount += 1;
+                    console.log(gameDetails.moveCount);
                     var mvCt = document.getElementById("mvCount");
-                    mvCt.innerHTML = gameState.moveCount;
-                    gameState.correctMoveCount += 1;
+                    mvCt.innerHTML = gameDetails.moveCount;
+                    gameDetails.correctMoveCount += 1;
+
+
                     var gmover = isGameOver();
                     console.log(gmover);
+
                     if(isGameOver()){
                         console.log("You win");
                         clearInterval(ntime);
@@ -130,20 +133,21 @@ function buildPanels(gridSize) {
                     setTimeout(function () {
                         resetPanels(lastObj.id, prevObj.id);
                     }, 2000);
-                    gameState.moveCount += 1;
-                    gameState.wrongMoveCount += 1;
-                    console.log(gameState.moveCount + ", " + gameState.wrongMoveCount);
+                    gameDetails.moveCount += 1;
+                    gameDetails.wrongMoveCount += 1;
+                    console.log(gameDetails.moveCount + ", " + gameDetails.wrongMoveCount);
                     var mvCt = document.getElementById("mvCount");
-                    mvCt.innerHTML = gameState.moveCount;
+                    mvCt.innerHTML = gameDetails.moveCount;
                     var wgMvCt = document.getElementById("incorrectCount");
-                    wgMvCt.innerHTML = gameState.wrongMoveCount;
+                    wgMvCt.innerHTML = gameDetails.wrongMoveCount;
                     console.log("incorrect guess");
                 }
-                gameState.moveState = 0;
-                //add call to update moves object in db with update_existing_game
+                gameDetails.moveState = 0;
+                //add call to update moves object in db with add_moves_current_game
+                //add_moves_current_game(gameDetails.id);
             }
         });
-        //indGamePanel.appendChild(gamePanelElement);
+
         theBoard.appendChild(gamePanelElement);
     }
 }

@@ -3,16 +3,22 @@ var IN_PROGRESS = 1;
 var COMPLETE = 2;
 
 
-var gameState = {
+var gameDetails = {
 
+    id:0,
     move:1,
-    gameStateState: NOT_STARTED,
+    gameState: NOT_STARTED,
     gameTime:0,
     moveCount:0,
     wrongMoveCount:0,
     correctMoveCount:0,
     moveState:0,
     movesToWin:0,
+    gridCount:0,
+    panelSize:0,
+    imageCount:0,
+    gameStart:0,
+    gameEnd:0,
 
     moves : [],
 	
@@ -49,6 +55,7 @@ function newGameStart(){
         if((request.readyState == 4) && (request.status == 200)){
             var data = JSON.parse(request.responseText);
             console.log(data);
+            gameDetails.id = data.id;
         }
     };
     request.open("POST","../add_new_game/",true);
@@ -58,7 +65,7 @@ function newGameStart(){
 
 
 //called from buildGameBoard.js when a user completes a move, consists of two clicks
-function update_current_game(cur_game){
+function add_moves_current_game(gameID){
     var request = new XMLHttpRequest();
 
     request.onload = undefined;
@@ -66,35 +73,35 @@ function update_current_game(cur_game){
         if((request.readyState == 4) && (request.status == 200)){
             var data = JSON.parse(request.responseText);
             console.log(data);
+
         }
     };
-    request.open("POST","../update_existing_game/",true);
+    request.open("POST","../add_moves_current_game/",true);
     request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     request.send();
 }
 
 function gmClock(){
-	gameState.gameTime += 1;
+	gameDetails.gameTime += 1;
     var timeKeeper = document.getElementById("totTime");
 	//console.log(gameTime);
-    timeKeeper.innerHTML = gameState.gameTime;
+    timeKeeper.innerHTML = gameDetails.gameTime;
 }
 
 
 function init(){
 	var strtBttn = document.getElementById("startBttn");
 	strtBttn.addEventListener('click', function(){
-        if(gameState.gameStateState === NOT_STARTED){
+        if(gameDetails.gameState === NOT_STARTED){
 
             //starts the process of creating a new game on the server
             newGameStart();
 
-            gameState.gameStateState = IN_PROGRESS;
+            //sets the status of the game to in progress
+            gameDetails.gameState = IN_PROGRESS;
 
 		    //loadGrid();
             buildGameBoard(4);
-
-            gameState.movesToWin = 8;
 
 		    //Commented out for testing. Uncomment for full game
 		    ntime = setInterval(gmClock, 1000);

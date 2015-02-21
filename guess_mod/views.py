@@ -96,10 +96,10 @@ def add_new_game(request):
         current_user = request.user
         n_game = Game(player=current_user)
         n_game.save()
-    return HttpResponse('{"status";"success","id":n_game.id}', content_type="application/json")
+    return HttpResponse('{"status":"success","id":'+ str(n_game.id) + '}', content_type="application/json")
 
 @csrf_exempt
-def update_existing_game(request):
+def add_moves_current_game(request):
     if request.method == "POST":
         mv_Start = request.mvStart
         mv_End = request.mvEnd
@@ -107,4 +107,4 @@ def update_existing_game(request):
         mv_Game = request.mvGame
         n_move = Moves(move_start=mv_Start, move_end=mv_End, move_outcome=mv_Outcome, game=mv_Game)
         n_move.save()
-    return HttpResponse('{"status";"success","id":n_move.id}', content_type="application/json")
+    return HttpResponse('{"status":"success","id":n_move.id}', content_type="application/json")
