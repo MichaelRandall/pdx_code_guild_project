@@ -12,9 +12,9 @@ class Gamer(models.Model):
 
 
 class Game(models.Model):
-    game_date = models.DateField(auto_now_add=True)
-    game_start = models.TimeField(auto_now_add=True)
-    game_end = models.TimeField(null=True)
+    game_start_date = models.DateField(auto_now_add=True)
+    game_start = models.FloatField(default=0)
+    game_end = models.FloatField(default=0)
     game_duration = models.TimeField(null=True)
     total_moves = models.IntegerField(default=0)
     incorrect_moves = models.IntegerField(default=0)
@@ -28,8 +28,8 @@ class Game(models.Model):
 
 class Moves(models.Model):
     game = models.ForeignKey(Game)
-    move_start = models.TimeField(null=True)
-    move_end = models.TimeField(null=True)
+    move_start = models.FloatField(default=0)
+    move_end = models.FloatField(default=0)
     move_outcome = models.CharField(max_length=100)
 
     def __unicode__(self):

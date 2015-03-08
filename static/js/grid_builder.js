@@ -17,10 +17,12 @@ var gameDetails = {
     gridCount:0,
     panelSize:0,
     imageCount:0,
-    gameStart:0,
-    gameEnd:0,
+    imageSet:"mahjong_numbers",
+    gameDate:0,
+    gameStartTime:0,
+    gameEndTime:0,
 
-    moves : [],
+    moves:[],
 	
 	addMove: function(move){
 		this.moves.push(move);
@@ -64,8 +66,8 @@ function newGameStart(){
 }
 
 
-//called from buildGameBoard.js when a user completes a move, consists of two clicks
-function add_moves_current_game(gameID){
+//called from buildGameBoard.js when a user completes a move, a move consists of two clicks
+function add_moves_current_game(moveDetails){
     var request = new XMLHttpRequest();
 
     request.onload = undefined;
@@ -73,12 +75,27 @@ function add_moves_current_game(gameID){
         if((request.readyState == 4) && (request.status == 200)){
             var data = JSON.parse(request.responseText);
             console.log(data);
-
         }
     };
     request.open("POST","../add_moves_current_game/",true);
     request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    request.send();
+    request.send(moveDetails);
+}
+
+//called when the user wins the game immediately after last winning click
+function update_game_final_details(gameOverDetails){
+    var request = new XMLHttpRequest();
+
+    request.onload = undefined;
+    request.onreadystatechange = function(){
+        if((request.readyState == 4) && (request.status == 200)){
+            var data = JSON.parse(request.responseText);
+            console.log(data);
+        }
+    };
+    request.open("POST","../update_game_final_details/",true);
+    request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    request.send(gameOverDetails);
 }
 
 function gmClock(){
@@ -88,6 +105,16 @@ function gmClock(){
     timeKeeper.innerHTML = gameDetails.gameTime;
 }
 
+function myGetMonth(date){
+    var myMonth = date.getMonth();
+    myMonth++
+    return myMonth < 10 ? '0' + myMonth : myMonth;
+}
+
+function myGetDate(date){
+    var myDate = date.getDate();
+    return myDate < 10 ? '0' + myDate : myDate;
+}
 
 function init(){
 	var strtBttn = document.getElementById("startBttn");
@@ -96,6 +123,30 @@ function init(){
 
             //starts the process of creating a new game on the server
             newGameStart();
+
+            var startTime = new Date();
+            var gmDateString = [];
+            var gmYear = startTime.getFullYear();
+            var gmMonth = myGetMonth(startTime);
+            var gmDate = myGetDate(startTime);
+
+            gmDateString.push(
+                gmYear, gmMonth, gmDate
+            );
+            console.log(gmDateString.join("-"));
+
+
+            //console.log(startTime);
+            //console.log(startTime.toUTCString());
+            //console.log(startTime.getUTCHours());
+            //console.log(startTime.getUTCMinutes());
+            //console.log(startTime.getUTCSeconds());
+            //console.log(startTime.getUTCMilliseconds());
+            gameDetails.gameStartTime = startTime.getTime();
+            gameDetails.gameDate = gmDateString.join("-");
+            console.log(gameDetails.gameDate);
+
+
 
             //sets the status of the game to in progress
             gameDetails.gameState = IN_PROGRESS;

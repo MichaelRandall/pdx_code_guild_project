@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 #from .models import GamerForm
 from guess_mod.models import Gamer, Game, Moves
 from guess_mod.forms import UserForm, GamerProfileForm
+from datetime import datetime, date
 
 
 def game(request):
@@ -90,21 +91,43 @@ def index(request):
     # context_dict = {'boldmessage': "I like being bold."}
     return render(request, 'guess_mod/index.html', context_dict)
 
+
 @csrf_exempt
 def add_new_game(request):
     if request.method == "POST":
         current_user = request.user
+        print ("mike: " + str(current_user.id) + " " + str(current_user))
         n_game = Game(player=current_user)
         n_game.save()
-    return HttpResponse('{"status":"success","id":'+ str(n_game.id) + '}', content_type="application/json")
+        print("game count: " + str(n_game.id))
+    return HttpResponse('{"status":"success","id": ' + str(n_game.id) + '}', content_type="application/json")
+
 
 @csrf_exempt
 def add_moves_current_game(request):
     if request.method == "POST":
-        mv_Start = request.mvStart
-        mv_End = request.mvEnd
-        mv_Outcome = request.mvOutCome
-        mv_Game = request.mvGame
-        n_move = Moves(move_start=mv_Start, move_end=mv_End, move_outcome=mv_Outcome, game=mv_Game)
+        n_move = Moves(game_id=str(request.POST['gameID']), move_start=str(request.POST['move_start']), move_end=str(request.POST['move_end']), move_outcome=str(request.POST['move_outcome']))
         n_move.save()
-    return HttpResponse('{"status":"success","id":n_move.id}', content_type="application/json")
+    return HttpResponse('{"status":"success","id":'+ str(n_move.id) + '}', content_type="application/json")
+
+@csrf_exempt
+def update_game_final_details(request):
+    if request.method == "POST":
+        gm_Id = str(request.POST['gm_id'])
+        gm_Start_Date = str(request.POST['gm_start_date'])
+        gm_Start_Time = str(request.POST['gm_start_time'])
+        gm_End = str(request.POST['gm_start_time'])
+        gm_TotMoves = str(request.POST['gm_tot_moves'])
+        gm_IncorrectMoves = str(request.POST['gm_incorrect_moves'])
+        gm_IconSet = str(request.POST['gm_icon_set'])
+        gm_GridCount = str(request.POST['gm_grid_count'])
+        gm_User = request.user
+        gm_UserID = gm_User.id
+
+        #print gm_UserID
+        #print type(gm_UserID)
+        u_game = Game(id=gm_Id, game_start_date=gm_Start_Date, game_start=gm_Start_Time, game_end=gm_End, total_moves=gm_TotMoves, incorrect_moves=gm_IncorrectMoves, icon_set=gm_IconSet, grid_count=gm_GridCount, player=gm_User)
+
+        #Game.objects.filter(id=gm_Id).update(game_start_date=gm_Start_Date,game_start=gm_Start_Time,game_end=gm_End,total_moves=gm_TotMoves,incorrect_moves=gm_IncorrectMoves,icon_set=gm_IconSet,grid_count=gm_GridCount)
+        u_game.save()
+    return HttpResponse('{"status":"success"}', content_type="application/json")
