@@ -1,0 +1,9 @@
+manage.py
+populate_game.py
+populate_gamer.py
+populate_moves.py
+guess_mod/*.bu.*
+templates/guess_mod/*.bu.*
+static/js/lazy.min.js
+static/js/underscore-min.js
+static/js/lazy.js
